@@ -1,9 +1,13 @@
 body { 
     margin: 0;
     text-align: center;
-    padding: 0 500px;
+    padding: 0 20px;
     background-color: #4A90E2;
     min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .site-title {
@@ -28,6 +32,12 @@ body {
     text-decoration: none;
     margin: 20px auto 0 auto;
     margin-top: 15px;
+}
+.social-link i {
+    font-size: 2rem;
+    width: 40px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .social-handle {
@@ -66,29 +76,48 @@ body {
 }
 
 .secret-box {
-    margin-left: auto;
-    margin-right: 20px;
-    margin-bottom: 60px;
+    position: absolute;
+    right: 20px;
+    bottom: 30px;
     width: fit-content;
     text-align: center;
-    padding: 20px;
+    padding: 12px 16px;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 6px;
 }
 
 .secret-title {
     font-family: 'Nunito', sans-serif;
     color: #F5F5F0;
     font-size: 1rem;
-    max-width: 250px;
+    max-width: 300px;
+    margin: 0 0 10px 0;
 }
 
 .secret-list {
     list-style: none;
     padding: 0;
     margin-top: 10px;
+    font-family: 'Nunito', sans-serif;
 }
 
 .secret-list li {
     margin-top: 6px;
+}
+
+.secret-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #F5F5F0;
+    text-decoration: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+}
+
+.secret-link i {
+    font-size: 1.1rem;
+    width: 18px;
+    text-align: center;
 }
