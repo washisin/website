@@ -9,7 +9,8 @@
 
 <!-- references style.css as the stylesheet, then preconnects google's API server for 
  text instructions, sending that info to the API server for raw font files, then
-requesting the font with specified weighting -->        
+requesting the font with specified weighting -->   
+
     <link rel="stylesheet" href="style.css">                             
     <link rel="preconnect" href="https://fonts.googleapis.com">          
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
@@ -19,10 +20,18 @@ requesting the font with specified weighting -->
 </head>
 <body>
 
-    <h1 class="site-title">placeholder</h1>
-    <p class="bio">i like games. i like data. i like marketing. let me help you :)</p>
+    <canvas id="bubble-canvas"></canvas>
+
+    <div id="score-display">Score: 0</div>
+
+    <h1 class="site-title">wash's world</h1>
+    <p class="bio">games are cool. i do marketing and data stuff. site is still a work in progress so please be nice...</p>
+    <a href="https://discord.gg/pmThZjvEzx" class="social-link" target="_blank">
+        <i class="fa-brands fa-discord"></i> 
+        <span class="social-handle">Join for more bubbles</span>
+    </a>
     <a href="https://www.tiktok.com/@washisin" class="social-link" target="_blank">
-        <i class="fa-brands fa-tiktok"></i> <!-- uses font awesome API to reference the tiktok icon from the brands section -->
+        <i class="fa-brands fa-tiktok"></i>
         <span class="social-handle">@washisin</span>
     </a>
     <a href="https://www.youtube.com/@washisin" class="social-link" target="_blank">
@@ -62,6 +71,91 @@ requesting the font with specified weighting -->
 
     </ul>
 </div>
+
+<script>
+
+    // im not going to claim to understand whats going on here in the JavaScript. i dont know java and i never will. just wanted a fun bubble clicking game :(
+
+const canvas = document.getElementById('bubble-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const bubbles = [];
+let score = 0;
+const scoreDisplay = document.getElementById('score-display');
+
+function createBubble() {
+    return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 60 + 15,
+        opacity: Math.random() * 0.15 + 0.05, 
+        blueTint: Math.random(),
+        speed: Math.random() * 1.5 + 0.5 
+    };
+}
+
+for (let i = 0; i < 15; i++) {
+    bubbles.push(createBubble());
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    bubbles.forEach(bubble => {
+        bubble.y -= bubble.speed;
+
+        if (bubble.y + bubble.radius < 0) {
+            bubble.y = canvas.height + bubble.radius;
+            bubble.x = Math.random() * canvas.width;
+        }
+
+        ctx.beginPath();
+        ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+
+        const r = Math.round(255 - (bubble.blueTint * 100));
+        const g = Math.round(255 - (bubble.blueTint * 60));
+        const b = 255;
+
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${bubble.opacity})`;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(40, 40, 40, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('click', function(event) {
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+        const bubble = bubbles[i];
+        const distance = Math.sqrt(
+            (mouseX - bubble.x) ** 2 + (mouseY - bubble.y) ** 2
+        );
+
+        if (distance < bubble.radius) {
+            bubbles.splice(i, 1);
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+            break;
+        }
+    }
+});
+
+</script>
 
 </body>
 </html>
