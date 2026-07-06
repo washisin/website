@@ -1,3 +1,9 @@
+<!-- to do: 
+ 1. have a reward for reaching 100 score? 
+ 2. start setting up discord integrations. idk how to do it yet tho
+ 3. sounds effects for popping balloons? i dont think its possible without a user input,
+    but what if the user input was clicking one of the buttons? that would enable it-->
+
 <!DOCTYPE html>    <!-- defines the script as HTML language -->                                               
 <html lang="en">   <!-- indicates to the browser that the default language is english -->  
 
@@ -14,7 +20,8 @@ requesting the font with specified weighting -->
     <link rel="stylesheet" href="style.css">                             
     <link rel="preconnect" href="https://fonts.googleapis.com">          
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;900&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
@@ -25,7 +32,10 @@ requesting the font with specified weighting -->
     <div id="score-display">Score: 0</div>
 
     <h1 class="site-title">wash's world</h1>
-    <p class="bio">games are cool. i do marketing and data stuff. site is still a work in progress so please be nice...</p>
+    <p class="bio">games are cool. i do marketing and data stuff.</p>
+
+    <div class="cta-note">click to open!</div>
+
     <a href="https://discord.gg/pmThZjvEzx" class="social-link" target="_blank">
         <i class="fa-brands fa-discord"></i> 
         <span class="social-handle">Join for more bubbles</span>
@@ -47,6 +57,17 @@ requesting the font with specified weighting -->
         <span class="social-handle">@wash_isin</span>
     </a>
 
+    <div class="video-wrapper">
+        <iframe 
+            src="https://www.youtube.com/embed/rdR5guLt_-o?rel=0&modestbranding=1&showinfo=0&autoplay=1" 
+            title="Test" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen>
+        </iframe>
+    </div>
+
     <div class="projects">
         <h2 class="projects-title">games i've worked on</h2>
         <u1 class="projects-list">
@@ -63,7 +84,7 @@ requesting the font with specified weighting -->
         <ul class="secret-list">
 
             <li>
-                <a href="https://washisin.github.io/website/" class="secret-link" target="_blank">
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1" class="secret-link" target="_blank">
                     <i class="fa-brands fa-itch-io"></i>
                     <span>LINKS COMING SOON</span>
                 </a>
@@ -75,9 +96,14 @@ requesting the font with specified weighting -->
 <script>
 
     // im not going to claim to understand whats going on here in the JavaScript. i dont know java and i never will. just wanted a fun bubble clicking game :(
+    // tbh its very similar to Python so I pretty much know what's happening but I wouldn't possibly have known all these functions and syntax beforehand so it's mostly 
+    // thrown together with tutorials and claude. sorry but its just a website so im not worried about it
+    // also i leave these notes for myself but if you're going through the source code rn in Inspector mode or on GitHub, fuck you!!
 
 const canvas = document.getElementById('bubble-canvas');
 const ctx = canvas.getContext('2d');
+const popSound = new Audio('sounds/pop.mp3');
+    // Sound Effect by Universfield from Pixabay (they asked me to give credit in the licensing so here)
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -148,8 +174,13 @@ window.addEventListener('click', function(event) {
 
         if (distance < bubble.radius) {
             bubbles.splice(i, 1);
+            bubbles.push(createBubble());
             score++;
             scoreDisplay.textContent = `Score: ${score}`;
+            
+            popSound.currentTime = 0;
+            popSound.play();
+            
             break;
         }
     }
